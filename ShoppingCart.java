@@ -36,7 +36,7 @@ public class ShoppingCart {
             System.out.println("Your cart is empty");
         } else {
             for (int i = 0; i <= cart.length(); i++) {
-                System.out.println((i+1) + ". " + cart[i]);
+                System.out.println(". " + cart[i]);
             }
         }
         // check cart for items
