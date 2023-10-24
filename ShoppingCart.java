@@ -1,4 +1,7 @@
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ShoppingCart {
     public static void main(String[] args) {
@@ -10,7 +13,7 @@ public class ShoppingCart {
         System.out.println("Welcome to your shopping cart");
 
         while (true) {
-            String input = cons.read(">");
+            String input = cons.readLine(">");
             input = input.trim();
 
             switch (input) {
@@ -32,13 +35,7 @@ public class ShoppingCart {
     }
 
     public static void list(ArrayList cart) {
-        if (cart[0] == null) {
-            System.out.println("Your cart is empty");
-        } else {
-            for (int i = 0; i <= cart.length(); i++) {
-                System.out.println(". " + cart[i]);
-            }
-        }
+        
         // check cart for items
         // if empty -> print cart is empty
         // if not empty -> list items in cart
