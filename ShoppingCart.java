@@ -1,66 +1,95 @@
-import java.io.Console;
+import java.util.Scanner;
 import java.util.ArrayList;
 
 
 public class ShoppingCart {
     public static void main(String[] args) {
         
-        Console cons = System.console();
+        Scanner scanner = new Scanner(System.in); // Create Scanner object
 
-        ArrayList<String> cart = new ArrayList<>();
+        ArrayList<String> cart = new ArrayList<>(); // Create cart
 
         System.out.println("Welcome to your shopping cart");
 
+        // Check which function user wants to do and invoke relevant methods
         while (true) {
-            String input = cons.readLine("> ");
-            input = input.trim();
-            String function = input.split(" ")[0];
-            String item = input.split(" ")[1];
-
+            String function = scanner.next();
+            function = function.trim();
+            String items = scanner.nextLine();
+            items = items.trim();
+            
             switch (function) {
                 case "list":
-                    ShoppingCart.list(cart);
-                    break;
-                case "add":
-                    ShoppingCart.add(item);
+                    if (items.isEmpty()) {
+                        ShoppingCart.list(cart);
+                    } else {
+                        System.out.println("Invalid Input. Available Input: list, add, delete, end.");
+                    }
                     break;
                 case "delete":
-                    ShoppingCart.delete();
+                    ShoppingCart.delete(cart, items);
+                    break;
+                case "add":
+                    if (items.isEmpty()) {
+                        System.out.println("Invalid Input. Please enter items to be added.");
+                    } else {
+                        ShoppingCart.add(cart, items);
+                    }
                     break;
                 case "end":
-                    System.out.println("Shopping ended");
-                    return;
-                default: 
-                    System.out.println("Invalid Action. Available Actions: list, add, delete, end");
+                    if (items.isEmpty()) {
+                        return;
+                    } else {
+                        System.out.println("Invalid Input. Available Input: list, add, delete, end.");
+                    }
                     break;
-            }
+                default:
+                    System.out.println("Invalid Input. Available Input: list, add, delete, end.");
+            }       
         }
     }
 
-    public static void list(ArrayList<String> cart) {
-        if (cart.size() == 0) {
-            System.out.println("Your cart is empty");
-        } else {
-            for (int i = 0; i <= cart.size(); i++) {
-                System.out.println(cart.get(i));
-            }
-        }
+    // list items in cart
         // check cart for items
         // if empty -> print cart is empty
         // if not empty -> list items in cart
+    public static void list(ArrayList cart) {
+        if (cart.size() == 0) {
+            System.out.println("Your cart is empty.");
+        } else {
+            for (int i = 0; i < cart.size(); i++) {
+                System.out.println(i+1 + ". " + cart.get(i));
+            }
+        }
     }
 
-    public static void add(String item) {
-        System.out.println(item + " added to cart");
+    // add items into cart
         // check cart for existing items
         // separate items by comma to get individual item
-        // if not duplicate -> add item into cart
+        // if not duplicate -> add item into cart and print relevant message
         // if duplicate -> print cart already have message
+    public static void add(ArrayList cart, String items) {
+        String[] itemList = items.split("[,]", 0);
+        for (String item : itemList) {
+            if (cart.contains(item)) {
+                System.out.println("You have " + item + " in your cart.");
+            } else {
+                System.out.println(item.trim() + " added to cart.");
+                cart.add(item.trim());
+            }
+        }        
     }
-
-    public static void delete() {
+    // delete items from cart
         // check length of array
         // if item index is out of array range -> display error message
         // if item index is in array range -> delete item
+    public static void delete(ArrayList cart, String items) {
+        int number = Integer.parseInt(items);
+        if (number > cart.size()) {
+            System.out.println("Incorrect item index.");
+        } else {
+            System.out.println(cart.get(number - 1) + " removed from cart.");
+            cart.remove(number - 1);
+        }
     }
 }
