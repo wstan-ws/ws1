@@ -1,10 +1,13 @@
 import java.util.Scanner;
+import java.io.Console;
 import java.util.ArrayList;
 
 
 public class ShoppingCart {
     public static void main(String[] args) {
         
+        boolean stopLoop = false;
+
         Scanner scanner = new Scanner(System.in); // Create Scanner object
 
         ArrayList<String> cart = new ArrayList<>(); // Create cart
@@ -12,7 +15,7 @@ public class ShoppingCart {
         System.out.println("Welcome to your shopping cart");
 
         // Check which function user wants to do and invoke relevant methods
-        while (true) {
+        while (!stopLoop) {            
             String function = scanner.next();
             function = function.trim();
             String items = scanner.nextLine();
@@ -38,7 +41,8 @@ public class ShoppingCart {
                     break;
                 case "end":
                     if (items.isEmpty()) {
-                        return;
+                        stopLoop = true;
+                        break;
                     } else {
                         System.out.println("Invalid Input. Available Input: list, add, delete, end.");
                     }
