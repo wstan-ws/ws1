@@ -1,98 +1,84 @@
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-
-public class ShoppingCart {
+public class test {
     public static void main(String[] args) {
         
-        boolean stopLoop = false;
+        // Create shopping cart for items
+        ArrayList<String> cart = new ArrayList<>();
 
-        Scanner scanner = new Scanner(System.in); // Create Scanner object
+        // Create scanner to gather user input
+        Scanner scanner = new Scanner(System.in);
 
-        ArrayList<String> cart = new ArrayList<>(); // Create cart
+        // Create looping boolean
+        boolean isLooping = true;
 
         System.out.println("Welcome to your shopping cart");
+        // Main program (loop)
+        while (isLooping) {
+            String command = scanner.next();
+            command = command.trim();
+            // command to be case insensitive
+            command = command.toLowerCase();
 
-        // Check which function user wants to do and invoke relevant methods
-        while (!stopLoop) {            
-            String function = scanner.next();
-            function = function.trim();
-            String items = scanner.nextLine();
-            items = items.trim();
-            
-            switch (function) {
+            String contents = scanner.nextLine();
+            contents = contents.trim();
+
+            switch (command) {
                 case "list":
-                    if (items.isEmpty()) {
-                        ShoppingCart.list(cart);
+                    if (cart.size() < 1) {
+                        System.out.println("Your cart is empty");
                     } else {
-                        System.out.println("Invalid Input. Available Input: list, add, delete, end.");
+                        for (int i = 0; i < cart.size(); i++) {
+                            System.out.printf("%d. %s %n", i + 1, cart.get(i));
+                        }
                     }
                     break;
-                case "delete":
-                    ShoppingCart.delete(cart, items);
-                    break;
+            // If cart empty, print appropriate message
+            // Contents should be numbered when listing
                 case "add":
-                    if (items.isEmpty()) {
-                        System.out.println("Invalid Input. Please enter items to be added.");
-                    } else {
-                        ShoppingCart.add(cart, items);
+                    String[] contentsList = contents.split(", ");
+                    for (String content : contentsList) {
+                        if (cart.contains(content)) {
+                            System.out.printf("You have %s in your cart %n", content);
+                        } else {
+                            cart.add(content);
+                            System.out.printf("%s added to cart %n", content);
+                        }
                     }
                     break;
+            // Add 1 or more items to cart
+            // items are separated by comma
+            // Prevent same item added into cart
+            // If item already in cart, print appropriate message
+                case "delete":
+                    int index = Integer.parseInt(contents);
+                    if (index < 0 || index > cart.size()) {
+                        System.out.println("Incorrect item index");
+                    } else {
+                        cart.remove(index - 1);
+                    }
+                    break;
+            // delete item based on item index in cart
+            // if incorrect index, display error message
                 case "end":
-                    if (items.isEmpty()) {
-                        stopLoop = true;
-                        break;
-                    } else {
-                        System.out.println("Invalid Input. Available Input: list, add, delete, end.");
-                    }
+                    System.out.println("Thank you for shopping");
+                    isLooping = false;
                     break;
+            // print a message for user
+            // end the program
                 default:
-                    System.out.println("Invalid Input. Available Input: list, add, delete, end.");
-            }       
-        }
-    }
-
-    // list items in cart
-        // check cart for items
-        // if empty -> print cart is empty
-        // if not empty -> list items in cart
-    public static void list(ArrayList cart) {
-        if (cart.size() == 0) {
-            System.out.println("Your cart is empty.");
-        } else {
-            for (int i = 0; i < cart.size(); i++) {
-                System.out.println(i+1 + ". " + cart.get(i));
+                    System.out.println("""
+                            Invalid Command. 
+                            Available Commands:
+                            - List
+                            - Add
+                            - Delete
+                            - End""");
+            // all other commands are invalid
+            // print invalid command message
             }
-        }
-    }
-
-    // add items into cart
-        // check cart for existing items
-        // separate items by comma to get individual item
-        // if not duplicate -> add item into cart and print relevant message
-        // if duplicate -> print cart already have message
-    public static void add(ArrayList cart, String items) {
-        String[] itemList = items.split("[,]", 0);
-        for (String item : itemList) {
-            if (cart.contains(item)) {
-                System.out.println("You have " + item + " in your cart.");
-            } else {
-                System.out.println(item.trim() + " added to cart.");
-                cart.add(item.trim());
-            }
-        }        
-    }
-    // delete items from cart
-        // check length of array
-        // if item index is out of array range -> display error message
-        // if item index is in array range -> delete item
-    public static void delete(ArrayList cart, String items) {
-        int number = Integer.parseInt(items);
-        if (number > cart.size()) {
-            System.out.println("Incorrect item index.");
-        } else {
-            System.out.println(cart.get(number - 1) + " removed from cart.");
-            cart.remove(number - 1);
+            scanner.close();
         }
     }
 }
