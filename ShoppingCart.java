@@ -1,9 +1,41 @@
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class test {
+public class ShoppingCart {
     public static void main(String[] args) {
         
+        // create defaultDB
+        File database = new File(".\\db");
+
+        /*  if directory specified
+            check if path exists & if its a directory
+            - use directory
+            if path does not exist
+            - create directory
+        */ 
+        if (args.length > 0) {
+            String directory = args[0].trim();
+            Path path = Paths.get(directory);
+            File db = path.toFile();
+            if (db.exists() && db.isDirectory()) {
+                database = db;
+                System.out.printf("%s directory is created %n", directory);
+            } else {
+                db.mkdirs();
+                database = db;
+                System.out.printf("%s directory is selected%n", directory);
+            }
+        } else {
+            database.mkdir();
+            System.out.println("default directory db is selected");
+        }
+
+        // Pass file selected to ShoppingCartDB for login, load, save
+        ShoppingCartDB.setFile(database);
+
         // Create shopping cart for items
         ArrayList<String> cart = new ArrayList<>();
 
@@ -17,12 +49,10 @@ public class test {
         // Main program (loop)
         while (isLooping) {
             String command = scanner.next();
-            command = command.trim();
-            // command to be case insensitive
-            command = command.toLowerCase();
+            command = command.trim().toLowerCase();
 
             String contents = scanner.nextLine();
-            contents = contents.trim();
+            contents = contents.trim().toLowerCase();
 
             switch (command) {
                 case "list":
@@ -56,11 +86,21 @@ public class test {
                     if (index < 0 || index > cart.size()) {
                         System.out.println("Incorrect item index");
                     } else {
+                        System.out.printf("%s has been removed from cart%n", cart.get(index - 1));
                         cart.remove(index - 1);
                     }
                     break;
             // delete item based on item index in cart
             // if incorrect index, display error message
+                case "login":
+                    cart = ShoppingCartDB.load(contents);
+                    break;
+                case "save":
+                    ShoppingCartDB.save(cart);
+                    break;
+                case "users":
+                    ShoppingCartDB.users();
+                    break;
                 case "end":
                     System.out.println("Thank you for shopping");
                     isLooping = false;
@@ -78,7 +118,7 @@ public class test {
             // all other commands are invalid
             // print invalid command message
             }
-            scanner.close();
         }
+        scanner.close();
     }
 }
