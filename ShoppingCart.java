@@ -8,7 +8,7 @@ public class ShoppingCart {
     public static void main(String[] args) {
         
         // create defaultDB
-        File database = new File(".\\db");
+        File database = new File("./db");
 
         /*  if directory specified
             check if path exists & if its a directory

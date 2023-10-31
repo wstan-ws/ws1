@@ -20,7 +20,7 @@ public class ShoppingCartDB {
         currentUser = contents;
         userCart.clear();
 
-        File currentFile = new File(String.format("C:/Users/wstan/Java/ws3/%s/%s.db", db, currentUser));
+        File currentFile = new File(String.format("./%s/%s.db", db, currentUser));
 
         if (currentFile.exists()) {
             // load file
@@ -67,7 +67,7 @@ public class ShoppingCartDB {
             System.out.println("Please login to your account");
         } else {
         
-            File currentFile = new File(String.format("C:/Users/wstan/Java/ws3/%s/%s.db", db, currentUser));
+            File currentFile = new File(String.format("./%s/%s.db", db, currentUser));
             userCart = cart;
 
             try {
